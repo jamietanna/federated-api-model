@@ -1,0 +1,30 @@
+name: Test `examples/go` Pull Request
+
+on:
+  pull_request:
+    paths:
+      - "examples/go/**"
+      - ".github/workflows/examples-go-pr.yml"
+      - "schemas/**"
+
+permissions:
+  contents: read
+jobs:
+  test:
+    defaults:
+      run:
+        working-directory: examples/go
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b
+
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version-file: 'go.mod'
+
+      - name: Test
+        run: make test
+
+      - name: Build
+        run: go build ./cmd/web
